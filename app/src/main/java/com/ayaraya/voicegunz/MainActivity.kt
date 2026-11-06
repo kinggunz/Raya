@@ -30,6 +30,7 @@ class MainActivity : Activity() {
     private lateinit var plusIcon: ImageView
     private lateinit var gameName: TextView
     private lateinit var startBtn: Button
+    private lateinit var a11yBtn: TextView
 
     private val reqOverlay = 21
     private val reqPerm = 22
@@ -44,12 +45,35 @@ class MainActivity : Activity() {
         plusIcon = findViewById(R.id.plusIcon)
         gameName = findViewById(R.id.gameName)
         startBtn = findViewById(R.id.startBtn)
+        a11yBtn = findViewById(R.id.a11yBtn)
 
         findViewById<TextView>(R.id.logo).applyLogoGradient()
         findViewById<View>(R.id.pickBtn).setOnClickListener { showPicker() }
         startBtn.setOnClickListener { tryStart() }
+        a11yBtn.setOnClickListener {
+            Toast.makeText(
+                this,
+                "Cari \"Voice Gunz\" lalu aktifkan. Jika diblokir: Info Aplikasi > titik tiga > Izinkan setelan terbatas",
+                Toast.LENGTH_LONG
+            ).show()
+            startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
+        }
 
         refreshSelection()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val on = isA11yOn()
+        a11yBtn.text = if (on) "Mode Kompatibel: AKTIF ✓" else "Aktifkan Mode Kompatibel (disarankan)"
+        a11yBtn.setTextColor(if (on) 0xFF00E676.toInt() else 0xFFB39DFF.toInt())
+    }
+
+    private fun isA11yOn(): Boolean {
+        val s = Settings.Secure.getString(
+            contentResolver, Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
+        ) ?: return false
+        return s.contains("$packageName/")
     }
 
     // ---------------------------------------------------------------- pilih game

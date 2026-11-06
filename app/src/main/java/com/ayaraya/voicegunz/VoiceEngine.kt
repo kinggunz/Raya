@@ -14,7 +14,10 @@ import kotlin.math.max
  * Mengambil suara dari mikrofon, mengubah nada secara real-time,
  * lalu memutarnya lewat speaker/headset.
  */
-class VoiceEngine(private val onError: (String) -> Unit) {
+class VoiceEngine(
+    private val onError: (String) -> Unit,
+    private val onWarning: (String) -> Unit = {}
+) {
 
     @Volatile private var running = false
     @Volatile private var gen = 0
@@ -97,9 +100,12 @@ class VoiceEngine(private val onError: (String) -> Unit) {
             val inBuf = ShortArray(frame)
             val outBuf = ShortArray(frame)
             val shifter = PitchShifter()
+            shifter.gain = 1.5
 
             rec.startRecording()
             track.play()
+
+            var silentFrames = 0
 
             while (running && g == gen) {
                 val n = rec.read(inBuf, 0, frame)
@@ -108,6 +114,24 @@ class VoiceEngine(private val onError: (String) -> Unit) {
                     break
                 }
                 if (n == 0) continue
+
+                // Deteksi mic dibungkam sistem (semua sampel persis nol)
+                var allZero = true
+                for (i in 0 until n) {
+                    if (inBuf[i].toInt() != 0) { allZero = false; break }
+                }
+                if (allZero) {
+                    silentFrames++
+                    if (silentFrames == 60 || silentFrames == 1500) {
+                        onWarning(
+                            "Mic tidak menerima suara. Kemungkinan dibungkam sistem karena " +
+                                "aplikasi lain memakai mic. Aktifkan Mode Kompatibel di layar utama."
+                        )
+                    }
+                } else {
+                    silentFrames = 0
+                }
+
                 shifter.ratio = preset.ratio
                 shifter.process(inBuf, outBuf, n)
                 track.write(outBuf, 0, n)

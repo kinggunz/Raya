@@ -17,8 +17,13 @@ class PitchShifter(private val window: Int = 1764) {
     @Volatile
     var ratio: Double = 1.0
 
+    /** Penguat volume keluaran. */
+    @Volatile
+    var gain: Double = 1.0
+
     fun process(input: ShortArray, output: ShortArray, n: Int) {
         val r = ratio
+        val g = gain
         for (i in 0 until n) {
             buf[w] = input[i] / 32768f
 
@@ -32,7 +37,7 @@ class PitchShifter(private val window: Int = 1764) {
 
             val sa = sin(PI * pa)
             val sb = sin(PI * pb)
-            val y = sa * sa * read(pa * window) + sb * sb * read(pb * window)
+            val y = (sa * sa * read(pa * window) + sb * sb * read(pb * window)) * g
 
             val v = (y * 32767.0).toInt().coerceIn(-32768, 32767)
             output[i] = v.toShort()
