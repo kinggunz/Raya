@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="290dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_panel"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ubah Suara"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:text="Pilih salah satu, lalu konfirmasi"
+        android:textColor="#99FFFFFF"
+        android:textSize="12sp" />
+
+    <RadioGroup
+        android:id="@+id/group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="14dp"
+        android:layout_marginTop="12dp">
+
+        <RadioButton
+            android:id="@+id/optChild"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Suara Anak Kecil"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp" />
+
+        <RadioButton
+            android:id="@+id/optMom"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Suara Ibu-ibu"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp" />
+
+        <RadioButton
+            android:id="@+id/optDad"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Suara Bapak-bapak"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/btnConfirm"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/bg_btn_primary"
+        android:stateListAnimator="@null"
+        android:text="Konfirmasi"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/btnOff"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:clickable="true"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Matikan pengubah suara"
+        android:textColor="#FF8A80"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/btnClose"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="Tutup"
+        android:textColor="#99FFFFFF"
+        android:textSize="14sp" />
+</LinearLayout>
